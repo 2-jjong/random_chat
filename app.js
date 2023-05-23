@@ -1,24 +1,13 @@
-// express 모듈 불러오기
-const express = require('express');
+const express = require('express'); // express 모듈 불러오기
+const socket = require('socket.io'); // socket.io 모듈 불러오기
+const http = require('http'); // Node.js 기본 내장 모듈 http 불러오기
+const fs = require('fs'); // Nodes.js 기본 내장 모듈 fs 불러오기(파일과 관련된 처리하는 모듈)
 
-// socket.io 모듈 불러오기
-const socket = require('socket.io');
+const app = express(); // express 객체 생성
 
-// Node.js 기본 내장 모듈 http 불러오기
-const http = require('http');
+const server = http.createServer(app); // express http 서버 생성
 
-// Nodes.js 기본 내장 모듈 fs 불러오기(파일과 관련된 처리하는 모듈)
-const fs = require('fs');
-
-
-// express 객체 생성
-const app = express();
-
-// express http 서버 생성
-const server = http.createServer(app);
-
-// 생성된 서버를 socket.io에 바인딩
-const io = socket(server);
+const io = socket(server); // 생성된 서버를 socket.io에 바인딩
 
 app.use('/css', express.static('./static/css'));
 app.use('/js', express.static('./static/js'));
@@ -37,13 +26,10 @@ app.get('/', function(request, response){
 })
 
 io.sockets.on('connection', function(socket){
-
-    // 새로운 유저가 접속했을 경우 다른 소켓에게도 알림
-    socket.on('newUser', function(name){
+    socket.on('newUser', function(name){ // 새로운 유저가 접속했을 경우 다른 소켓에게도 알림
         console.log(name + '님이 접속하였습니다.');
 
-        // 소켓에 이름 저장
-        socket.name = name;
+        socket.name = name; // 소켓에 이름 저장
 
         // 모든 소켓에게 전송
         io.sockets.emit('update', {type: 'connect', name: 'SERVER', message: name + '님이 접속하였습니다.'});
@@ -51,13 +37,11 @@ io.sockets.on('connection', function(socket){
 
     // 전송한 메시지 받기
     socket.on('message', function(data){
-        // 받은 데이터에 누가 보냈는지 이름 추가
-        data.name = socket.name;
+        data.name = socket.name; // 받은 데이터에 누가 보냈는지 이름 추가
 
         console.log(data);
 
-        // 모든 소켓에게 메시지 전송
-        io.sockets.emit('update', data);
+        io.sockets.emit('update', data); // 모든 소켓에게 메시지 전송
     })
 
     // 접속 종료
@@ -69,5 +53,4 @@ io.sockets.on('connection', function(socket){
     })
 })
 
-// 서버를 8080포트로 설정, 서버 접속 시 print
-server.listen(8080, function() {console.log('서버 실행 중...')}); 
+server.listen(8080, function() {console.log('서버 실행 중...')}); // 서버를 8080포트로 설정, 서버 접속 시 출력
