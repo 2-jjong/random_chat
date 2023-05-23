@@ -1,0 +1,23 @@
+{
+  "name": "random_chat",
+  "version": "1.0.0",
+  "description": "랜덤채팅 사이트",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2-jjong/random_chat.git"
+  },
+  "author": "이종현",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/2-jjong/random_chat/issues"
+  },
+  "homepage": "https://github.com/2-jjong/random_chat#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1"
+  }
+}
